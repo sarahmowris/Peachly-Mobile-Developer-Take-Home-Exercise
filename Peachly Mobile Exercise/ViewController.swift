@@ -24,6 +24,8 @@ class ViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         message.delegate = self
+        message.text = "Message"
+        message.textColor = UIColor.lightGray
         messageCount.text = "0/500"
         emailValidation.isHidden = true
         firstnameValidation.isHidden = true
@@ -65,7 +67,7 @@ class ViewController: UIViewController, UITextViewDelegate {
             lastnameValidation.isHidden = false
             lastnameValidation.text = "Required Field"
         }
-        if message.text!.count == 0 || messageCount.text == "0/500" {
+        if messageCount.text == "0/500" {
             messageValidation.isHidden = false
             messageValidation.text = "Required Field"
         }
@@ -74,23 +76,23 @@ class ViewController: UIViewController, UITextViewDelegate {
             emailValidation.text = "Required Field"
         } else if validEmail(email: email.text!) == false {
             emailValidation.isHidden = false
-            emailValidation.text = "Please enter valid email address"
+            emailValidation.text = "Please enter a valid email address"
         }
     }
     
-//    //Creating Placeholder in Text View
-//    func textViewDidBeginEditing(_ textView: UITextView) {
-//        if textView.textColor == UIColor.lightGray {
-//            textView.text = nil
-//            textView.textColor = UIColor.black
-//        }
-//    }
-//    func textViewDidEndEditing(_ textView: UITextView) {
-//        if textView.text.isEmpty {
-//            textView.text = "Message"
-//            textView.textColor = UIColor.lightGray
-//        }
-//    }
+    //Creating Placeholder in Text View
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Message"
+            textView.textColor = UIColor.lightGray
+        }
+    }
     
     
     //POST Request
@@ -98,19 +100,22 @@ class ViewController: UIViewController, UITextViewDelegate {
         
         self.submit()
         
-        var validate : String = ""
-        if validEmail(email: email.text!) {
-            validate = email.text!
+        var validMessage : String = ""
+        if  messageCount.text != "0/500" {
+            validMessage = message.text!
         }
         
-        let validateEmail = validate
+        var validateEmail : String = ""
+        if validEmail(email: email.text!) {
+            validateEmail = email.text!
+        }
         
         
         let parameters = [
             "first" : firstName.text!,
             "last" : lastName.text!,
             "email" : validateEmail,
-            "message" : message.text!
+            "message" : validMessage
             ]
         
         //create URL
@@ -136,7 +141,7 @@ class ViewController: UIViewController, UITextViewDelegate {
             guard let data = data else {return}
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions())  as? [String: String] {
-                    print("json: \(json)")
+                    print(json)
                 }
             } catch {
                 print(error)
