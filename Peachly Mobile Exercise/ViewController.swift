@@ -33,6 +33,20 @@ class ViewController: UIViewController, UITextViewDelegate {
         messageValidation.isHidden = true
     }
     
+    //Creating Placeholder in Message eText View
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Message"
+            textView.textColor = UIColor.lightGray
+        }
+    }
+    
     
     //Character Count
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -80,19 +94,6 @@ class ViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    //Creating Placeholder in Text View
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.lightGray {
-            textView.text = nil
-            textView.textColor = UIColor.black
-        }
-    }
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.text = "Message"
-            textView.textColor = UIColor.lightGray
-        }
-    }
     
     
     //POST Request
